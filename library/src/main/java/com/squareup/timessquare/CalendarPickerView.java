@@ -635,6 +635,10 @@ public class CalendarPickerView extends ListView {
    * @see DateUtils
    */
   private String formatMonthDate(Date date) {
+    if (calendarFormatter != null) {
+      return calendarFormatter.formatMonthDate(date);
+    }
+
     int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
             | DateUtils.FORMAT_NO_MONTH_DAY;
 
@@ -673,6 +677,11 @@ public class CalendarPickerView extends ListView {
     Locale.setDefault(defaultLocale);
 
     return dateFormatted;
+  }
+
+  private CalendarFormatter calendarFormatter;
+  public void setMonthFormatter(CalendarFormatter calendarFormatter) {
+    this.calendarFormatter = calendarFormatter;
   }
 
   private void validateDate(Date date) {
