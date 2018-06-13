@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import com.squareup.timessquare.CalendarCellDecorator;
+import com.squareup.timessquare.CalendarFormatter;
 import com.squareup.timessquare.CalendarPickerView;
 import com.squareup.timessquare.CalendarPickerView.SelectionMode;
 import com.squareup.timessquare.DefaultDayViewAdapter;
@@ -33,6 +34,12 @@ public class SampleTimesSquareActivity extends Activity {
   private CalendarPickerView dialogView;
   private final Set<Button> modeButtons = new LinkedHashSet<Button>();
 
+  final static String[] THAI_FULL_MONTH = {
+          "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+          "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+          "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+  };
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.sample_calendar_picker);
@@ -44,6 +51,17 @@ public class SampleTimesSquareActivity extends Activity {
     lastYear.add(Calendar.YEAR, -1);
 
     calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+    calendar.setMonthFormatter(new CalendarFormatter() {
+      @Override
+      public String formatMonthDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int month = cal.get(Calendar.MONTH);
+        String thaiMonth = THAI_FULL_MONTH[month];
+        int year = cal.get(Calendar.YEAR) + 543;
+        return String.format("%s %d", thaiMonth, year);
+      }
+    });
     calendar.init(lastYear.getTime(), nextYear.getTime()) //
         .inMode(SelectionMode.SINGLE) //
         .withSelectedDate(new Date());
